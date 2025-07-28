@@ -1,0 +1,16 @@
+body {
+  font-family: sans-serif;
+  background: #f9f9f9;
+}
+.btn-eco {
+  background: #4caf50;
+  color: white;
+}
+.btn-eco:hover {
+  background: #45a049;
+}
+.card {
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+}
+.navbar-brand { font-weight: bold; color: #2f7d32 !important; }

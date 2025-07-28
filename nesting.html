@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><title>Nesting Suitability | BeeNews</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link href="css/style.css" rel="stylesheet">
+  <style>#map { height: 400px; }</style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-sm navbar-light bg-light p-3 mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">BeeNews</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="forecast.html">Forecast</a></li>
+            <li class="nav-item"><a class="nav-link" href="history.html">Historical Data</a></li>
+            <li class="nav-item"><a class="nav-link" href="nesting.html">Nesting Suitability</a></li>
+            <li class="nav-item"><a class="nav-link" href="intervention.html">Intervention</a></li>
+          </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div id="map" class="mb-3"></div>
+    <div class="card p-3">
+      <h5>Toggle Layers</h5>
+      <div class="form-check"><input id="bsiChk"   class="form-check-input" type="checkbox" checked>
+        <label class="form-check-label">Bare Soil Index (BSI)</label></div>
+      <div class="form-check"><input id="slopeChk" class="form-check-input" type="checkbox" checked>
+        <label class="form-check-label">Slope</label></div>
+      <div class="form-check"><input id="aspectChk"class="form-check-input" type="checkbox" checked>
+        <label class="form-check-label">Aspect</label></div>
+      <div class="form-check"><input id="compChk"  class="form-check-input" type="checkbox" checked>
+        <label class="form-check-label">Composite Score</label></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="js/map.js"></script>
+</body>
+</html>

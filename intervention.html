@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><title>Intervention Suggestions | BeeNews</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar navbar-expand-sm navbar-light bg-light p-3 mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">BeeNews</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="forecast.html">Forecast</a></li>
+            <li class="nav-item"><a class="nav-link" href="history.html">Historical Data</a></li>
+            <li class="nav-item"><a class="nav-link" href="nesting.html">Nesting Suitability</a></li>
+            <li class="nav-item"><a class="nav-link" href="intervention.html">Intervention</a></li>
+          </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <div class="alert alert-success">
+      Ask for location‑specific pollination interventions!
+    </div>
+    <div class="card p-3">
+      <div id="chatWindow" style="height:300px; overflow-y:auto; background:#eef; padding:1rem; border-radius:0.5rem;"></div>
+      <div class="input-group mt-3">
+        <input type="text" id="chatInput" class="form-control" placeholder="Type your question...">
+        <button id="sendBtn" class="btn btn-eco">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/chat.js"></script>
+</body>
+</html>
