@@ -16,7 +16,7 @@ jobs: #force refresh
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.14
+          python-version: 3.12.13
 
       - name: Install dependencies
         run: |
