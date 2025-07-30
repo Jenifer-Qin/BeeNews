@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <title>7‑Day Forecast | BeeNews</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
   <nav class="navbar navbar-expand-sm navbar-light bg-light p-3 mb-4">
@@ -16,7 +17,7 @@
         </button>
         <div class="collapse navbar-collapse" id="mainNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="forecast.html">Forecast</a></li>
+            <li class="nav-item"><a class="nav-link active" href="forecast.html">Forecast</a></li>
             <li class="nav-item"><a class="nav-link" href="history.html">Historical Data</a></li>
             <li class="nav-item"><a class="nav-link" href="nesting.html">Nesting Suitability</a></li>
             <li class="nav-item"><a class="nav-link" href="intervention.html">Intervention</a></li>
@@ -25,21 +26,58 @@
     </div>
   </nav>
 
-
   <div class="container mt-4">
-    <div class="card p-4">
-      <h3>7‑day weather forecast</h3>
-      <p>This is the predicted weather and bee activity. Plan your pollination!</p>
-      <table class="table mt-3" id="forecastTable">
-        <thead><tr>
-          <th>Date</th><th>Temp (°C)</th><th>Rain (mm)</th><th>Wind (m/s)</th><th>Activity</th>
-        </tr></thead>
+    <div class="card p-4 shadow-sm">
+      <h3>🐝 7‑Day Weather Forecast</h3>
+      <p class="text-muted">This is the predicted weather and bee activity. Plan your pollination!</p>
+      <table class="table mt-3 table-bordered table-hover" id="forecastTable">
+        <thead class="table-light">
+          <tr>
+            <th>Date</th>
+            <th>Max Temp (°C)</th>
+            <th>Rain (mm)</th>
+            <th>Wind (m/s)</th>
+            <th>Bee Activity</th>
+          </tr>
+        </thead>
         <tbody></tbody>
       </table>
     </div>
   </div>
 
+  <script>
+    async function loadForecastCSV() {
+      try {
+        const response = await fetch('data/bee_forecast.csv?v=' + new Date().getTime());
+        const csvText = await response.text();
+
+        const parsed = Papa.parse(csvText, { header: true });
+        const data = parsed.data.filter(row => row.Date); // remove empty rows
+
+        const tbody = document.querySelector('#forecastTable tbody');
+        tbody.innerHTML = '';
+
+        data.forEach(row => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${row.Date}</td>
+            <td>${row.TMAX_C}</td>
+            <td>${row.PRCP_mm}</td>
+            <td>${row.WIND_m_s}</td>
+            <td>${row.Bee_Activity}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error('❌ Error loading CSV:', err);
+        const tbody = document.querySelector('#forecastTable tbody');
+        tbody.innerHTML = `<tr><td colspan="5" class="text-danger">Failed to load forecast data.</td></tr>`;
+      }
+    }
+
+    window.onload = loadForecastCSV;
+  </script>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="js/forecast.js"></script>
 </body>
 </html>
