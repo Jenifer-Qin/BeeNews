@@ -5,6 +5,9 @@ on:
     - cron: '0 6 * * *'  # every day at 6am UTC
   workflow_dispatch:     # allow manual trigger too
 
+permissions:
+  content: write
+
 jobs: #force refresh
   update:
     runs-on: ubuntu-latest
@@ -27,8 +30,8 @@ jobs: #force refresh
 
       - name: Commit & Push if data changed
         run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
+          git config --global user.name 'Jenifer-Qin'
+          git config --global user.email 'jqin53@wisc.edu'
           git add data/
           git diff --cached --quiet || git commit -m "Auto-update weather data"
           git push
