@@ -7,9 +7,9 @@ from datetime import datetime, timedelta
 # --- Activity scoring ---
 def score_bee_activity_simple(row):
     score = 0
-    if 20 <= row['TMAX_C'] <= 30:
+    if pd.notnull(row['TMAX_C']) and 20 <= row['TMAX_C'] <= 30:
         score += 0.5
-    elif 15 <= row['TMAX_C'] < 20 or 30 < row['TMAX_C'] <= 35:
+    elif pd.notnull(row['TMAX_C']) and 15 <= row['TMAX_C'] < 20 or 30 < row['TMAX_C'] <= 35:
         score += 0.25
 
     if row['PRCP_mm'] == 0:
