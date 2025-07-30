@@ -7,20 +7,23 @@ from datetime import datetime, timedelta
 # --- Activity scoring ---
 def score_bee_activity_simple(row):
     score = 0
-    if pd.notnull(row['TMAX_C']) and 20 <= row['TMAX_C'] <= 30:
-        score += 0.5
-    elif pd.notnull(row['TMAX_C']) and 15 <= row['TMAX_C'] < 20 or 30 < row['TMAX_C'] <= 35:
-        score += 0.25
+    if pd.notnull(row['TMAX_C']):
+        if 20 <= row['TMAX_C'] <= 30:
+            score += 0.5
+        elif 15 <= row['TMAX_C'] < 20 or 30 < row['TMAX_C'] <= 35:
+            score += 0.25
 
-    if row['PRCP_mm'] == 0:
-        score += 0.3
-    elif 0 < row['PRCP_mm'] <= 1:
-        score += 0.15
+    if pd.notnull(row['PRCP_mm']):
+        if row['PRCP_mm'] == 0:
+            score += 0.3
+        elif 0 < row['PRCP_mm'] <= 1:
+            score += 0.15
 
-    if row['WIND_m_s'] < 2.5:
-        score += 0.2
-    elif row['WIND_m_s'] < 3.5:
-        score += 0.1
+    if pd.notnull(row['WIND_m_s']):
+        if row['WIND_m_s'] < 2.5:
+            score += 0.2
+        elif row['WIND_m_s'] < 3.5:
+            score += 0.1
 
     return score
 
