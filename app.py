@@ -28,14 +28,14 @@ def intervention_page():
 # API ENDPOINTS
 @app.route('/api/forecast')
 def get_forecast():
-    df = pd.read_csv('static/data/bee_activity_forecast.csv')
+    df = pd.read_csv('data/bee_forecast.csv')
     return jsonify(df.to_dict(orient='records'))
 
 @app.route('/api/history')
 def get_history():
     start = request.args.get('start')
     end = request.args.get('end')
-    df = pd.read_csv('static/data/bee_activity_history.csv', parse_dates=['date'])
+    df = pd.read_csv('data/bee_history.csv', parse_dates=['date'])
     mask = (df.date >= start) & (df.date <= end)
     return jsonify(df.loc[mask].to_dict(orient='records'))
 
