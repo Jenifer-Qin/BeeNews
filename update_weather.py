@@ -38,13 +38,14 @@ def classify_bee_activity_simple(row):
 
 # --- Dates ---
 today = datetime.today().date()
-yesterday = today - timedelta(days=1)
+start_hist = today - timedelta(days=7)
+end_hist = today - timedelta(days=1)
 
 # --- History ---
 hist_url = (
     "https://archive-api.open-meteo.com/v1/archive"
     f"?latitude=43.316&longitude=-90.850"
-    f"&start_date={yesterday}&end_date={yesterday}"
+    f"&start_date={start_hist}&end_date={end_hist}"
     "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max"
     "&temperature_unit=celsius&windspeed_unit=ms&precipitation_unit=mm&timezone=auto"
 )
@@ -62,7 +63,9 @@ df_hist['Bee_Activity'] = df_hist.apply(classify_bee_activity_simple, axis=1)
 hist_path = 'data/bee_history.csv'
 if os.path.exists(hist_path):
     old = pd.read_csv(hist_path, parse_dates=['date'])
-    df_hist = pd.concat([old, df_hist]).drop_duplicates('date').sort_values('date')
+    # Remove old rows for the updated days, then append new data
+    old = old[~old['date'].isin(df_hist['date'])]
+    df_hist = pd.concat([old, df_hist], ignore_index=True).sort_values('date')
 
 df_hist.to_csv(hist_path, index=False)
 
