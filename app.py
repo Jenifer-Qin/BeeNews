@@ -24,6 +24,10 @@ def nesting_page():
 def intervention_page():
     return render_template('intervention.html')
 
+@app.route("/privacy")
+def privacy():
+    return render_template("privacy.html")
+
 
 # API ENDPOINTS
 @app.route('/api/forecast')
