@@ -35,6 +35,52 @@ def classify_bee_activity_simple(row):
         return "Moderate"
     else:
         return "Poor"
+    
+def score_bee_activity_forecast(row):
+    score = 0
+
+    # Temperature
+    if pd.notnull(row['TMAX_C']):
+        if 20 <= row['TMAX_C'] <= 30:
+            score += 0.5
+        elif 15 <= row['TMAX_C'] < 20 or 30 < row['TMAX_C'] <= 35:
+            score += 0.25
+
+    # Wind
+    if pd.notnull(row['WIND_m_s']):
+        if row['WIND_m_s'] < 2.5:
+            score += 0.2
+        elif row['WIND_m_s'] < 3.5:
+            score += 0.1
+
+    # Precipitation — reduce weight since cloud cover added
+    if pd.notnull(row['PRCP_mm']):
+        if row['PRCP_mm'] == 0:
+            score += 0.15
+        elif 0 < row['PRCP_mm'] <= 1:
+            score += 0.05
+
+    # Cloud Cover — penalize high cloud %
+    if pd.notnull(row['CLOUD_pct']):
+        if row['CLOUD_pct'] < 30:
+            score += 0.15
+        elif row['CLOUD_pct'] < 60:
+            score += 0.1
+        elif row['CLOUD_pct'] < 80:
+            score += 0.05
+        # else: very cloudy — no points
+
+    return score
+
+def classify_bee_activity_forecast(row):
+    score = score_bee_activity_forecast(row)
+    if score >= 0.75:
+        return "Optimal"
+    elif score >= 0.4:
+        return "Moderate"
+    else:
+        return "Poor"
+
 
 # --- Dates ---
 today = datetime.today().date()
@@ -73,7 +119,7 @@ df_hist.to_csv(hist_path, index=False)
 forecast_url = (
     "https://api.open-meteo.com/v1/forecast"
     "?latitude=43.316&longitude=-90.850"
-    "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max"
+    "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,cloudcover"
     "&temperature_unit=celsius&windspeed_unit=ms&precipitation_unit=mm&timezone=auto"
 )
 forecast_resp = requests.get(forecast_url).json()
@@ -83,7 +129,8 @@ df_forecast = df_forecast.drop(columns='time').rename(columns={
     'temperature_2m_max': 'TMAX_C',
     'temperature_2m_min': 'TMIN_C',
     'precipitation_sum': 'PRCP_mm',
-    'windspeed_10m_max': 'WIND_m_s'
+    'windspeed_10m_max': 'WIND_m_s',
+    'cloudcover': 'CLOUD_pct'
 })
-df_forecast['Bee_Activity'] = df_forecast.apply(classify_bee_activity_simple, axis=1)
+df_forecast['Bee_Activity'] = df_forecast.apply(classify_bee_activity_forecast, axis=1)
 df_forecast.to_csv('data/bee_forecast.csv', index=False)
