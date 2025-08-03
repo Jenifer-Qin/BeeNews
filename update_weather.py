@@ -57,7 +57,7 @@ hist_url = (
     "https://archive-api.open-meteo.com/v1/archive"
     f"?latitude=43.316&longitude=-90.850"
     f"&start_date={start_hist}&end_date={end_hist}"
-    "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max"
+    "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,sunshine_duration"
     "&temperature_unit=celsius&windspeed_unit=ms&precipitation_unit=mm&timezone=auto"
 )
 hist_resp = requests.get(hist_url).json()
