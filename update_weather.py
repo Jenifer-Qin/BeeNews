@@ -67,7 +67,7 @@ df_hist = df_hist.drop(columns='time').rename(columns={
     'temperature_2m_max': 'TMAX_C',
     'temperature_2m_min': 'TMIN_C',
     'precipitation_sum': 'PRCP_mm',
-    'windspeed_10m_max': 'WIND_m_s'，
+    'windspeed_10m_max': 'WIND_m_s',
     'sunshine_duration': 'SUN_sec'
 })
 df_hist['SUN_min'] = df_hist['SUN_sec'] / 60
