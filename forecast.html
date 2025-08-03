@@ -52,7 +52,7 @@
         const csvText = await response.text();
 
         const parsed = Papa.parse(csvText, { header: true });
-        const data = parsed.data.filter(row => row.Date); // remove empty rows
+        const data = parsed.data.filter(row => row.date); // remove empty rows
 
         const tbody = document.querySelector('#forecastTable tbody');
         tbody.innerHTML = '';
@@ -60,7 +60,7 @@
         data.forEach(row => {
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td>${row.Date}</td>
+            <td>${row.date}</td>
             <td>${row.TMAX_C}</td>
             <td>${row.PRCP_mm}</td>
             <td>${row.WIND_m_s}</td>
