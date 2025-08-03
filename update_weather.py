@@ -3,40 +3,8 @@ import os
 import requests
 import pandas as pd
 from datetime import datetime, timedelta
-
-# --- Activity scoring ---
-def score_bee_activity_simple(row):
-    score = 0
-    if pd.notnull(row['TMAX_C']):
-        if 20 <= row['TMAX_C'] <= 30:
-            score += 0.5
-        elif 15 <= row['TMAX_C'] < 20 or 30 < row['TMAX_C'] <= 35:
-            score += 0.25
-
-    if pd.notnull(row['PRCP_mm']):
-        if row['PRCP_mm'] == 0:
-            score += 0.3
-        elif 0 < row['PRCP_mm'] <= 1:
-            score += 0.15
-
-    if pd.notnull(row['WIND_m_s']):
-        if row['WIND_m_s'] < 2.5:
-            score += 0.2
-        elif row['WIND_m_s'] < 3.5:
-            score += 0.1
-
-    return score
-
-def classify_bee_activity_simple(row):
-    score = score_bee_activity_simple(row)
-    if score >= 0.75:
-        return "Optimal"
-    elif score >= 0.4:
-        return "Moderate"
-    else:
-        return "Poor"
     
-def score_bee_activity_forecast(row):
+def score_bee_activity(row):
     score = 0
 
     # Temperature
@@ -69,8 +37,8 @@ def score_bee_activity_forecast(row):
 
     return score
 
-def classify_bee_activity_forecast(row):
-    score = score_bee_activity_forecast(row)
+def classify_bee_activity(row):
+    score = score_bee_activity(row)
     if score >= 0.75:
         return "Optimal"
     elif score >= 0.4:
@@ -99,9 +67,11 @@ df_hist = df_hist.drop(columns='time').rename(columns={
     'temperature_2m_max': 'TMAX_C',
     'temperature_2m_min': 'TMIN_C',
     'precipitation_sum': 'PRCP_mm',
-    'windspeed_10m_max': 'WIND_m_s'
+    'windspeed_10m_max': 'WIND_m_s'，
+    'sunshine_duration': 'SUN_sec'
 })
-df_hist['Bee_Activity'] = df_hist.apply(classify_bee_activity_simple, axis=1)
+df_hist['SUN_min'] = df_hist['SUN_sec'] / 60
+df_hist['Bee_Activity'] = df_hist.apply(classify_bee_activity, axis=1)
 
 hist_path = 'data/bee_history.csv'
 if os.path.exists(hist_path):
@@ -130,5 +100,5 @@ df_forecast = df_forecast.drop(columns='time').rename(columns={
     'sunshine_duration': 'SUN_sec'
 })
 df_forecast['SUN_min'] = df_forecast['SUN_sec'] / 60
-df_forecast['Bee_Activity'] = df_forecast.apply(classify_bee_activity_forecast, axis=1)
+df_forecast['Bee_Activity'] = df_forecast.apply(classify_bee_activity, axis=1)
 df_forecast.to_csv('data/bee_forecast.csv', index=False)
