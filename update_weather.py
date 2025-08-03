@@ -53,22 +53,19 @@ def score_bee_activity_forecast(row):
         elif row['WIND_m_s'] < 3.5:
             score += 0.1
 
-    # Precipitation — reduce weight since cloud cover added
+    # Precipitation — reduce weight since sunshine_duration added
     if pd.notnull(row['PRCP_mm']):
         if row['PRCP_mm'] == 0:
-            score += 0.15
+            score += 0.1
         elif 0 < row['PRCP_mm'] <= 1:
             score += 0.05
 
-    # Cloud Cover — penalize high cloud %
-    if pd.notnull(row['CLOUD_pct']):
-        if row['CLOUD_pct'] < 30:
-            score += 0.15
-        elif row['CLOUD_pct'] < 60:
+    # Sunshine (in minutes)
+    if pd.notnull(row['SUN_min']):
+        if row['SUN_min'] >= 480:
+            score += 0.2
+        elif row['SUN_min'] >= 240:
             score += 0.1
-        elif row['CLOUD_pct'] < 80:
-            score += 0.05
-        # else: very cloudy — no points
 
     return score
 
@@ -119,7 +116,7 @@ df_hist.to_csv(hist_path, index=False)
 forecast_url = (
     "https://api.open-meteo.com/v1/forecast"
     "?latitude=43.316&longitude=-90.850"
-    "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,cloudcover"
+    "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,sunshine_duration"
     "&temperature_unit=celsius&windspeed_unit=ms&precipitation_unit=mm&timezone=auto"
 )
 forecast_resp = requests.get(forecast_url).json()
@@ -130,7 +127,8 @@ df_forecast = df_forecast.drop(columns='time').rename(columns={
     'temperature_2m_min': 'TMIN_C',
     'precipitation_sum': 'PRCP_mm',
     'windspeed_10m_max': 'WIND_m_s',
-    'cloudcover': 'CLOUD_pct'
+    'sunshine_duration': 'SUN_sec'
 })
+df_forecast['SUN_min'] = df_forecast['SUN_sec'] / 60
 df_forecast['Bee_Activity'] = df_forecast.apply(classify_bee_activity_forecast, axis=1)
 df_forecast.to_csv('data/bee_forecast.csv', index=False)
