@@ -34,7 +34,7 @@
         <thead class="table-light">
           <tr>
             <th>Date</th>
-            <th>Max Temp (°C)</th>
+            <th>Temp min/max (°C)</th>
             <th>Rain (mm)</th>
             <th>Wind (m/s)</th>
             <th>Sunshine (min)</th>
@@ -59,6 +59,7 @@
         tbody.innerHTML = '';
 
         data.forEach(row => {
+          const tempDisplay = `${row.TMIN_C}°C / ${row.TMAX_C}°C`;
           const tr = document.createElement('tr');
           tr.innerHTML = `
             <td>${row.date}</td>
