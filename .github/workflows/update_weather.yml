@@ -35,4 +35,5 @@ jobs: #force refresh
           git config --global user.email 'jqin53@wisc.edu'
           git add data/
           git diff --cached --quiet || git commit -m "Auto-update weather data"
-          git push
+          git pull origin main
+          git push origin main
