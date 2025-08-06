@@ -74,7 +74,8 @@
         .then(res => res.text())
         .then(csvText => {
           const rows = csvText.trim().split('\n');
-          const header = rows[0].split(',');
+          const header = rows[0].split(',').map(h => h.trim());
+
 
           const indexMap = {
             date: header.indexOf('date'),
