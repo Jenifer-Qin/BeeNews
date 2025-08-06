@@ -43,9 +43,9 @@ def score_bee_activity(row):
 
 def classify_bee_activity(row):
     score = score_bee_activity(row)
-    if score >= 0.75:
+    if score >= 0.65:
         return "Optimal"
-    elif score >= 0.4:
+    elif score >= 0.3:
         return "Moderate"
     else:
         return "Poor"
