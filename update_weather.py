@@ -8,11 +8,15 @@ def score_bee_activity(row):
     score = 0
 
     # Temperature
-    if pd.notnull(row['TMAX_C']):
-        if 20 <= row['TMAX_C'] <= 30:
-            score += 0.5
-        elif 15 <= row['TMAX_C'] < 20 or 30 < row['TMAX_C'] <= 35:
-            score += 0.25
+    if pd.notnull(row['TMAX_C']) and pd.notnull(row['TMIN_C']):
+        if 20 <= row['TMIN_C'] and row['TMAX_C'] <= 30:
+            score += 0.5  # fully optimal
+        elif (
+            (15 <= row['TMIN_C'] < 20 and row['TMAX_C'] <= 30) or
+            (row['TMIN_C'] >= 20 and 30 < row['TMAX_C'] <= 35)
+        ):
+            score += 0.25  # partially suitable
+
 
     # Wind
     if pd.notnull(row['WIND_m_s']):
